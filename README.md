@@ -1,0 +1,115 @@
+# wyrecam
+HomeKit camera firmware for ingenic T31X based wyze cameras
+
+### Status
+This project is a work in progress.  Currently it supports a limited ability to stream RTSP from the camera.
+
+### This project aims for the following:
+* 100% open source (readable and inspectable) software 
+	* U-Boot: Control from the very first command executed
+	* Kernel: Fully open source kernel software
+	* Drivers and SOC libraries are a work in progress (see TODO.md for remaining BLOBs)
+	* Video and audio streaming software
+* First class support for HomeKit (work in progress)
+	* Goal to support HKSV natively from the camera with high performance
+	* Can be disabled through configuration
+* First class support RTSP
+	* Many custom camera configurations use RTSP to self host video backend processing and vendors are removing this functionality to drive people to their cloud services
+	* Can be disabled through configuration
+* As secure as possible
+	* Only SSHD (dropbear) and HomeKit (Apple APK) / RTSPD (live555) listening ports running.  SSHD can be disabled.
+	* Secure root password setup at install
+* No anti-features
+	* No web configuration - you'll have to ssh into the camera or use and SD card to configure it
+	* No method of auto-update (why should you trust this repo not to be hacked?) - you'll have to update manually
+	* No tftp boot image requests
+	* Designed to work without an internet connection (on a dedicated VLAN for example)
+* Built on cheap (WYZEC3, etc) cameras for low cost
+
+### Building
+The first two optional steps build the factory boot kernel for initial boot from the sd card
+
+TODO This first step will probably error out trying to build an sd card image - that's ok for now
+```
+(optional) ./building.sh t31_install_wyzec3
+(optional) cp output/images/uImage factory_t31_ZMC6tiIDQN
+./building.sh t31_wyzec3
+```
+Copy the image to an SD card (know what you're doing)
+```
+dd if=/output/image/wyrecam_install.img of=/dev/<sdb> bs=512
+```
+
+### Configure and install
+Insert the new sd card into a computer and edit update.sh to add the wifi credentials and a root passwd (search for passwd and replace with your new passed)
+
+Optionally disable ssh and enable blinking lights to see when the flash process is done
+
+Unmount the sd card and eject from the computer
+
+Insert the sd card into the camera and power on.  Red LED light will turn on
+
+DO NOT REMOVE POWER for 10 minutes - this build has no recovery mechanisms from interupted upgrades.
+
+
+Upgrade finish times
+```Boot: 0:09 m
+Flash Backup: 2:03 m
+Flash Erase: 2:49 m
+Flash Write: 3:09 m
+Flash Verify: 3:14 m
+Flash Finish configure: 3:21 m
+Boot Compete: 4:00 m
+```
+
+Red LED light turns off.  Unplug power.
+
+Remove sd card from the camera and backup spi_backup/backup.bin  I recommend saving this with the filename of the MAC of the camera.  This file can be used to recover the the camera to the original firmware - just rename the file to nor_full.bin, load it to the sd card and reflash.
+
+
+
+### Documentation
+See the docs directory for more documentation
+
+## Similar projects, references and credits
+### v3-unlocker
+https://git.i386.io/wyze/v3-unlocker
+
+U-boot used and the method of creating an SD card were borrowed from wyrecam
+
+### OpenIPC
+The point-of-departure for wyrecam.  This project aims to be mergable with OpenIPC down the road but will remain separate until all components of OpenIPC (especially Majestic) are fully open source.
+
+### t20_rtspd
+https://github.com/geekman/t20-rtspd, basis of the basic rtsp streamer used in rel 1.
+
+### ingenic_videocap and openmiko
+https://github.com/openmiko/ingenic_videocap, an alternative v4l2 video pipeline 
+
+### Ingenic-SDK-T31
+https://github.com/cgrrty/Ingenic-SDK-T31-1.1.1-20200508, thanks cgrrty for posting this
+
+### Wyze GPL source code links
+https://support.wyze.com/hc/en-us/articles/360012546832-Open-Source-Software, thanks wyze and GPL
+
+### Dafang-Hacks
+Several places refer to this repository although it was not used in the developemnt of WyreCam
+https://github.com/Dafang-Hacks
+
+### Apple HAP ADK
+https://github.com/apple/HomeKitADK, likely the basis of homekit functionality in future releases
+
+### hkcam
+https://github.com/brutella/hkcam, a camera project that I used previously
+
+### hap-nodejs
+https://github.com/homebridge/HAP-NodeJS, and homebridge, camera projects I used previously
+
+### homebridge-ffmpeg
+https://github.com/Sunoo/homebridge-camera-ffmpeg, a camera project I used previously
+
+### homebridge-unity
+https://github.com/hjdhjd/homebridge-unifi-protect/blob/main/docs/HomeKitSecureVideo.md and all the folks that got hksv to work on homebridge showing that this project was feasable
+
+
+

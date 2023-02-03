@@ -1,0 +1,12 @@
+--- a/include/configs/isvp_t31.h	2021-11-27 11:45:26.079474330 -0500
++++ b/include/configs/isvp_t31.h	2021-11-27 12:06:47.591458776 -0500
+@@ -312,6 +312,9 @@
+ /*#define CONFIG_DDR_PHY_DQ_ODT*/
+ /*#define CONFIG_DDR_PHY_DQS_ODT*/
+ 
++#define CONFIG_SYS_HUSH_PARSER	1
++#define CONFIG_CMD_TEST
++
+ /**
+  * Boot arguments definitions.
+  */

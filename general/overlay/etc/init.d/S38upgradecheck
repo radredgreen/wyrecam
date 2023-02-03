@@ -1,0 +1,14 @@
+#!/bin/sh
+
+case "$1" in
+  start)
+    printf "Looking for upgrade.sh on mmc card:\n"
+    sleep 1
+    if [[ -f /mnt/mmcblk0p1/upgrade.sh ]]; then
+       echo "upgrade.sh found"
+       /mnt/mmcblk0p1/upgrade.sh 2>&1 | tee /mnt/mmcblk0p1/upgrade.out
+    else
+      echo "Not found."
+    fi
+    ;;
+esac

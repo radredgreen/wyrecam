@@ -1,0 +1,9 @@
+config BR2_PACKAGE_INGENIC_VIDEOCAP
+	bool "ingenic_videocap"
+	depends on BR2_USE_MMU # fork
+	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
+	depends on !BR2_STATIC_LIBS
+	depends on BR2_PACKAGE_INGENIC_OSDRV_T31
+	select BR2_PACKAGE_ALSA_LIB
+	help
+	  ingenic_videocap

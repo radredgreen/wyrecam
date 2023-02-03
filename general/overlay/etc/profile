@@ -1,0 +1,56 @@
+export PATH="/bin:/sbin:/usr/bin:/usr/sbin:/tmp"
+export HOME=$(grep -e "^${USER:-root}:" /etc/passwd | cut -d ":" -f 6)
+export HOME=${HOME:-/root}
+export TZ=$(cat /etc/TZ)
+# export SENSOR=$(fw_printenv -n sensor)
+export ARCH=$(uname -m)
+export HISTFILE=/tmp/.ash_history
+
+# export DEBUG=$(($(fw_printenv -n debug)))
+# [ $DEBUG -ge 1 ] && [ -f "${HISTFILE//tmp/root}" ] && cp ${HISTFILE//tmp/root} /tmp/
+# [ $DEBUG -ge 2 ] && export HISTFILE=${HISTFILE//tmp/root}
+
+echo_c() { echo -ne "\e[1;$1m$2\e[0m"; }
+
+if [ "$PS1" ]; then
+	[ -f /etc/os-release ] && . /etc/os-release
+	[ -f /etc/openipc_banner ] && echo_c 34 "$(cat /etc/openipc_banner)\n"
+	echo_c 32 "$(printf "%56s" "${GITHUB_VERSION}")"
+	echo_c 37 "\n\n\n"
+	#
+	if [ "`id -u`" -eq 0 ]; then
+		export PS1='\u@\h:\w\# '
+	else
+		export PS1='\u@\h:\w\$ '
+	fi
+fi
+
+if echo $ARCH | grep -q mips; then
+	export ARC='-mips32'
+else
+	export ARC=''
+fi
+
+export EDITOR='/bin/vi'
+
+[ -x /usr/bin/arp ] || arp() { cat /proc/net/arp; }
+
+cli() { yaml-cli -i /etc/majestic.yaml $@; }
+
+differ() { diff -rN "/rom$1" "$1"; }
+
+[ -x /tmp/ipctool ] || ipctool() { [ -x /tmp/ipctool ] && /tmp/ipctool $@ || (curl -s -L -o /tmp/ipctool https://github.com/OpenIPC/ipctool/releases/download/latest/ipctool$ARC && \
+	chmod +x /tmp/ipctool && echo_c 35 "The ipctool installed as remote GitHub plugin" && /tmp/ipctool $@); }
+
+majestic_changes() { diff -L "Majestic changes" -U 3 /rom/etc/majestic.yaml /etc/majestic.yaml; }
+
+show_modules() { echo; cat /proc/modules | cut -f 1 -d " " | while read module; do echo "Module: $module"; \
+	if [ -d "/sys/module/$module/parameters" ]; then ls /sys/module/$module/parameters/ | while read parameter; \
+	do echo -n "Parameter: $parameter --> "; cat /sys/module/$module/parameters/$parameter; done; fi; echo; done; }
+
+show_fullname() { echo "openipc-$(ipcinfo --chip-name)-$(ipcinfo --short-sensor)"; }
+
+set_fullname() { show_fullname >/etc/hostname; }
+
+# Source configuration files from /etc/profile.d
+for i in /etc/profile.d/*.sh; do [ -r "$i" ] && . $i; done; unset i

@@ -1,0 +1,10 @@
+--- u-boot.orig/common/cmd_gpio.c	2021-11-26 09:24:03.787784342 -0500
++++ u-boot/common/cmd_gpio.c	2022-04-27 01:08:22.133194997 -0400
+@@ -59,7 +59,6 @@
+ 	/* grab the pin before we tweak it */
+ 	if (gpio_request(gpio, "cmd_gpio")) {
+ 		printf("gpio: requesting pin %u failed\n", gpio);
+-		return -1;
+ 	}
+ 
+ 	/* finally, let's do it: set direction and exec command */

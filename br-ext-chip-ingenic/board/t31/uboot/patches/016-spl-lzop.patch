@@ -1,0 +1,12 @@
+diff -aruN u-boot/include/configs/isvp_t31.h u-boot-b/include/configs/isvp_t31.h
+--- u-boot/include/configs/isvp_t31.h	2021-11-22 12:41:58.349912267 -0500
++++ u-boot-b/include/configs/isvp_t31.h	2021-11-22 12:42:51.890254867 -0500
+@@ -610,7 +610,7 @@
+ 
+ #define CONFIG_SPL_MAX_SIZE		(26 * 1024)
+ 
+-#undef CONFIG_SPL_LZOP
++#define CONFIG_SPL_LZOP
+ #ifdef CONFIG_SPL_LZOP
+ 	#define CONFIG_DECMP_BUFFER_ADRS        0x80200000
+ #endif

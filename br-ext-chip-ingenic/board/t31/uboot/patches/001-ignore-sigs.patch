@@ -1,0 +1,56 @@
+--- a/common/cmd_sdupdate.c	2021-11-26 10:56:33.269217834 -0500
++++ b/common/cmd_sdupdate.c	2021-11-26 10:57:18.036456474 -0500
+@@ -306,7 +306,7 @@
+ 	}
+ 
+ #ifdef CONFIG_AUTO_UPDATE_CRYPTO
+-	if(0 != eddsa_verify(LOAD_ADDR, sz))
++	if(0)
+ 	{
+ 		printf("%s sigh verify fail\n", aufile[idx]);
+ 		return -1;
+@@ -400,7 +400,7 @@
+ 
+ #if (defined(CONFIG_AUTO_UPDATE_CRYPTO) && defined(NETUP_SIGN))
+ 			memcpy(pbuf+ausize[IDX_KBACK]+ausize[IDX_RABACK], signature, SIGNATURE);
+-			if(0 != eddsa_verify(pbuf, ausize[IDX_KBACK]+ausize[IDX_RABACK]+SIGNATURE))
++			if(0)
+ 			{
+ 				printf("Signature verification failed\n");
+ 				return 1;
+@@ -447,7 +447,7 @@
+ 
+ #if (defined(CONFIG_AUTO_UPDATE_CRYPTO) && defined(NETUP_SIGN))
+ 			memcpy(pbuf+ausize[IDX_KBACK]+ausize[IDX_RABACK], signature, SIGNATURE);
+-			if(0 != eddsa_verify(pbuf, ausize[IDX_KBACK]+ausize[IDX_RABACK]+SIGNATURE))
++			if(0)
+ 			{
+ 				printf("Signature verification failed\n");
+ 				return 1;
+@@ -480,7 +480,7 @@
+ 
+ #if (defined(CONFIG_AUTO_UPDATE_CRYPTO) && defined(NETUP_SIGN))
+ 			memcpy(pbuf+ausize[IDX_KBACK], signature, SIGNATURE);
+-			if(0 != eddsa_verify(pbuf, ausize[IDX_KBACK]+SIGNATURE))
++			if(0)
+ 			{
+ 				printf("Signature verification failed\n");
+ 				return 1;
+@@ -513,7 +513,7 @@
+ 
+ #if (defined(CONFIG_AUTO_UPDATE_CRYPTO) && defined(NETUP_SIGN))
+ 			memcpy(pbuf+ausize[IDX_RABACK], signature, SIGNATURE);
+-			if(0 != eddsa_verify(pbuf, ausize[IDX_RABACK]+SIGNATURE))
++			if(0)
+ 			{
+ 				printf("Signature verification failed\n");
+ 				return 1;
+@@ -546,7 +546,7 @@
+ 
+ #if (defined(CONFIG_AUTO_UPDATE_CRYPTO) && defined(NETUP_SIGN))
+ 			memcpy(pbuf+ausize[IDX_RABACK], signature, SIGNATURE);
+-			if(0 != eddsa_verify(pbuf, ausize[IDX_RABACK]+SIGNATURE))
++			if(0)
+ 			{
+ 				printf("Signature verification failed\n");
+ 				return 1;

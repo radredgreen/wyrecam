@@ -1,0 +1,13 @@
+config BR2_PACKAGE_LIVE555_WYRECAM
+	bool "live555-wyrecam"
+	select BR2_INSTALL_LIBSTDCPP
+	depends on BR2_INSTALL_LIBSTDCPP
+	depends on !BR2_STATIC_LIBS
+	help
+	  LIVE555 Streaming Media forms a set of C++ libraries for multimedia
+	  streaming, using open standard protocols (RTP/RTCP, RTSP, SIP).
+
+	  http://www.live555.com/liveMedia/
+
+comment "live555 needs a toolchain w/ C++, dynamic library"
+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS

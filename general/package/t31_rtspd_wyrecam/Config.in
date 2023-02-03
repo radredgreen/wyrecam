@@ -1,0 +1,5 @@
+config BR2_PACKAGE_T31_RTSPD_WYRECAM
+	bool "t31-rtspd"
+	select BR2_PACKAGE_LIVE555_WYRECAM
+	help
+	  t31-rtspd

@@ -1,0 +1,11 @@
+--- a/include/configs/isvp_t31.h	2021-11-26 10:58:14.631479059 -0500
++++ b/include/configs/isvp_t31.h	2021-11-26 14:03:11.095644180 -0500
+@@ -345,7 +345,7 @@
+ /**
+  * Boot command definitions.
+  */
+-#define CONFIG_BOOTDELAY 0
++#define CONFIG_BOOTDELAY 3
+ 
+ #ifdef CONFIG_SPL_MMC_SUPPORT
+ #define CONFIG_BOOTCOMMAND "mmc read 0x80600000 0x1800 0x3000; bootm 0x80600000"

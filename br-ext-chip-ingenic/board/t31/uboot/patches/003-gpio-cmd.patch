@@ -1,0 +1,10 @@
+--- a/include/configs/isvp_t31.h	2021-11-26 14:38:37.831644211 -0500
++++ b/include/configs/isvp_t31.h	2021-11-26 14:38:58.836107253 -0500
+@@ -471,6 +471,7 @@
+ 
+ /* GPIO */
+ #define CONFIG_JZ_GPIO
++#define CONFIG_CMD_GPIO
+ 
+ /**
+  * Command configuration.

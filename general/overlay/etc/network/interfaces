@@ -1,0 +1,15 @@
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+    hwaddress ether $(fw_printenv -n ethaddr || echo 00:24:B8:FF:FF:FF)
+
+auto wlan0
+iface wlan0 inet dhcp
+    pre-up wpa_supplicant -B -D nl80211 -i wlan0 -c/etc/wpa_supplicant.conf
+    post-down killall -q wpa_supplicant
+
+#source-dir /etc/network/interfaces.d
+

@@ -1,0 +1,17 @@
+--- a/board/ingenic/isvp_t31/board.c	2021-11-27 10:31:25.837343591 -0500
++++ b/board/ingenic/isvp_t31/board.c	2021-11-27 10:31:15.861017791 -0500
+@@ -64,6 +64,14 @@
+ 	int n = 0;
+ 	int ret_cd = 0;
+ 
++	// Set conflicting GPIOs as inputs
++	// PA25 conflicts with PB15 (MMC Enable)
++	// PA26 conflicts with PB16
++	ret = gpio_request(25, "mmc_conflict");
++	ret = gpio_direction_input(25);
++	ret = gpio_request(26, "unk_conflict");
++	ret = gpio_direction_input(26);
++
+ 	//set the wifi enable gpio to on
+ 	printf("misc_init_r before change the wifi_enable_gpio\n");
+ 	ret = gpio_request(57,"wifi_enable_gpio"); 

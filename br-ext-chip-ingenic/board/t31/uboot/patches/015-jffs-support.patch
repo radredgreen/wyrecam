@@ -1,0 +1,12 @@
+diff -aruN u-boot/include/configs/isvp_t31.h u-boot-b/include/configs/isvp_t31.h
+--- u-boot/include/configs/isvp_t31.h	2021-11-22 12:38:30.928843616 -0500
++++ u-boot-b/include/configs/isvp_t31.h	2021-11-22 12:39:02.016973428 -0500
+@@ -485,7 +485,7 @@
+ #define CONFIG_CMD_FAT		/* FAT support			*/
+ #define CONFIG_CMD_EXT2		/* EXT2 support			*/
+ #define CONFIG_CMD_EXT4		/* EXT4 support			*/
+-/*#define CONFIG_CMD_JFFS2*/	/* JFFS2 support        */
++#define CONFIG_CMD_JFFS2	/* JFFS2 support        */
+ #define CONFIG_CMD_LOADB	/* loadb			*/
+ #define CONFIG_CMD_LOADS	/* loads			*/
+ #define CONFIG_CMD_MEMORY	/* md mm nm mw cp cmp crc base loop mtest */

@@ -1,0 +1,25 @@
+diff -aruN u-boot-b/include/image.h u-boot/include/image.h
+--- u-boot-b/include/image.h	2020-10-28 17:39:40.063537040 -0400
++++ u-boot/include/image.h	2020-10-28 18:13:23.485881261 -0400
+@@ -62,7 +62,7 @@
+ #endif /* USE_HOSTCC */
+ 
+ #if defined(CONFIG_FIT)
+-#include <libfdt.h>
++#include "libfdt.h"
+ #include <fdt_support.h>
+ # ifdef CONFIG_SPL_BUILD
+ #  ifdef CONFIG_SPL_CRC32_SUPPORT
+diff -aruN u-boot-b/tools/Makefile u-boot/tools/Makefile
+--- u-boot-b/tools/Makefile	2020-10-28 17:39:40.089537234 -0400
++++ u-boot/tools/Makefile	2020-10-28 18:13:15.609821580 -0400
+@@ -188,8 +188,7 @@
+ # Use native tools and options
+ # Define __KERNEL_STRICT_NAMES to prevent typedef overlaps
+ #
+-HOSTCPPFLAGS =	-include $(SRCTREE)/include/libfdt_env.h \
+-		-idirafter $(SRCTREE)/include \
++HOSTCPPFLAGS =	-idirafter $(SRCTREE)/include \
+ 		-idirafter $(OBJTREE)/include2 \
+ 		-idirafter $(OBJTREE)/include \
+ 	        -I $(SRCTREE)/lib/libfdt \

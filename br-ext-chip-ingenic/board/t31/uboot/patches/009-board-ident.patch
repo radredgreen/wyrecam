@@ -1,0 +1,15 @@
+--- a/board/ingenic/isvp_t31/board.c	2021-11-28 11:18:33.645131194 -0500
++++ b/board/ingenic/isvp_t31/board.c	2021-11-28 11:18:19.413126993 -0500
+@@ -64,6 +64,12 @@
+ 	int n = 0;
+ 	int ret_cd = 0;
+ 
++#if defined (CONFIG_PRODUCT_WYZEV3)
++	setenv("board", "WYZEV3");
++#else
++	setenv("board", "Unknown");
++#endif
++
+ 	// Set conflicting GPIOs as inputs
+ 	// PA25 conflicts with PB15 (MMC Enable)
+ 	// PA26 conflicts with PB16

@@ -1,0 +1,47 @@
+--- u-boot/include/configs/isvp_t31.h	2023-01-29 10:40:15.643771214 -0600
++++ u-boot-b/include/configs/isvp_t31.h	2023-01-29 10:39:43.874723060 -0600
+@@ -319,7 +319,7 @@
+  * Boot arguments definitions.
+  */
+ #if (defined(CONFIG_DDR2_128M) || defined(CONFIG_DDR3_128M))
+-#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=80M@0x0 rmem=48M@0x5000000"
++#define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=64M@0x0 rmem=64M@0x4000000"
+ #else
+ #define BOOTARGS_COMMON "console=ttyS1,115200n8 mem=42M@0x0 rmem=22M@0x2a00000"
+ #endif
+@@ -340,7 +340,7 @@
+ #ifdef CONFIG_SPL_MMC_SUPPORT
+ 	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc root=/dev/mmcblk0p2 rw rootdelay=1"
+ #elif defined(CONFIG_SFC_NOR)
+-	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/linuxrc rootfstype=squashfs root=/dev/mtdblock2 rw mtdparts=jz_sfc:256K(boot),1984K(kernel),3904K(rootfs),3904K(app),1984K(kback),3904K(aback),384K(cfg),64K(para)"
++	#define CONFIG_BOOTARGS BOOTARGS_COMMON " init=/init rootfstype=squashfs root=/dev/mtdblock3 rw mtdparts=jz_sfc:256k(boot),64k(env),3072k(kernel),10240k(rootfs),-(rootfs_data)"
+ #elif defined(CONFIG_SFC_NAND)
+ 	#define CONFIG_BOOTARGS BOOTARGS_COMMON " ip=off init=/linuxrc ubi.mtd=2 root=ubi0:rootfs ubi.mtd=3 rootfstype=ubifs rw"
+ #endif
+@@ -371,10 +371,25 @@
+ 	    echo \"MMC not found...\"; \
+ 	fi; \
+ 	sf probe; \
+-	sf read 0x80600000 0x40000 0x1F0000; \
++	sf read 0x80600000 0x50000 0x300000; \
+ 	bootm 0x80600000;"
+ #endif /* CONFIG_SFC_NOR */
+ 
++#define CONFIG_SFC_MIN_ALIGN 0x10000
++
++#define CONFIG_ENV_OFFSET       0x40000
++#define CONFIG_ENV_SIZE         0x10000
++#define CONFIG_ENV_SECT_SIZE    0x10000
++
++#undef CONFIG_SYS_PROMPT
++#define CONFIG_SYS_PROMPT       "wyrecam # "
++
++#define CONFIG_AUTOBOOT_KEYED
++#define CONFIG_AUTOBOOT_PROMPT          \
++    "Press Ctrl-c to abort autoboot... %d \n", bootdelay
++#define CONFIG_AUTOBOOT_STOP_STR        "\x3"
++
++
+ #ifdef CONFIG_SFC_NAND
+ 	#define CONFIG_BOOTCOMMAND "sfcnand read 0x100000 0x400000 0x80600000 ;bootm 0x80600000"
+ #endif

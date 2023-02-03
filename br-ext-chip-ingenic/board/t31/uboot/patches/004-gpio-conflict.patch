@@ -1,0 +1,29 @@
+--- a/common/cmd_gpio.c	2021-11-26 14:40:00.585422858 -0500
++++ b/common/cmd_gpio.c	2021-11-26 14:43:46.757762803 -0500
+@@ -16,7 +16,7 @@
+ #endif
+ 
+ enum gpio_cmd {
+-	GPIO_INPUT,
++	GPIO_CMD_INPUT,
+ 	GPIO_SET,
+ 	GPIO_CLEAR,
+ 	GPIO_TOGGLE,
+@@ -44,7 +44,7 @@
+ 
+ 	/* parse the behavior */
+ 	switch (*str_cmd) {
+-		case 'i': sub_cmd = GPIO_INPUT;  break;
++		case 'i': sub_cmd = GPIO_CMD_INPUT;  break;
+ 		case 's': sub_cmd = GPIO_SET;    break;
+ 		case 'c': sub_cmd = GPIO_CLEAR;  break;
+ 		case 't': sub_cmd = GPIO_TOGGLE; break;
+@@ -63,7 +63,7 @@
+ 	}
+ 
+ 	/* finally, let's do it: set direction and exec command */
+-	if (sub_cmd == GPIO_INPUT) {
++	if (sub_cmd == GPIO_CMD_INPUT) {
+ 		gpio_direction_input(gpio);
+ 		value = gpio_get_value(gpio);
+ 	} else {

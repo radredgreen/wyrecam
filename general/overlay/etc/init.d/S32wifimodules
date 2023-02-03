@@ -1,0 +1,44 @@
+#!/bin/sh
+
+case "$1" in
+  start)
+    printf "Loading wifi modules:\n"
+    # load modules for detected devices
+
+    cp /lib/modules/3.10.14__isvp_swan_1.0__/ingenic/*.txt /tmp/
+    sync
+
+    echo "################## to wait wifi vendor id ####################"
+
+    # Insert wifi driver...
+    while [ ! -f /sys/bus/mmc/devices/mmc1\:0001/mmc1\:0001\:1/vendor ]; do
+        sleep 0.1
+    done
+
+    WifiVendorId=`cat /sys/bus/mmc/devices/mmc1\:0001/mmc1\:0001\:1/vendor`
+
+    if [[ "0x024c" == $WifiVendorId ]]; then
+        echo "################## [vendor:$WifiVendorId] rtl8189ftv wifi #################"
+        modprobe rtl8189ftv.ko
+    elif [[ "0x007a" == $WifiVendorId ]]; then
+        echo "################## [vendor:$WifiVendorId] atbm603x wifi ###################"
+        modprobe atbm603x_wifi_sdio.ko
+    elif [[ "0x5653" == $WifiVendorId ]]; then
+        echo "################## [vendor:$WifiVendorId] ssv6x5x wifi ####################"
+        modprobe ssv6x5x.ko stacfgpath=/lib/modules/3.10.14__isvp_swan_1.0__/ingenic/ssv6x5x-wifi.cfg
+    elif [[ "0x424c" == $WifiVendorId ]]; then
+        echo "################## [vendor:$WifiVendorId] bl_fdrv wifi ####################"
+        modprobe bl_fdrv.ko
+    else
+        echo "################## [vendor:$WifiVendorId] unknown wifi ####################"
+    fi
+
+    # Unclear what the next lines do.  The wyze firmware does this after it initalizes the wifi modules
+    # Unknown, Don't change!
+    devmem 0x10011110 32 0x6e094800
+    # Clear the drive capability setting for PB04 (minimum drive capability)
+    devmem 0x10011138 32 0x300
+    # Set the drive capability of PB04
+    devmem 0x10011134 32 0x200
+    ;;
+esac

@@ -1,0 +1,28 @@
+--- a/include/configs/isvp_t31.h	2021-11-27 11:16:09.619212570 -0500
++++ b/include/configs/isvp_t31.h	2021-11-27 11:43:51.790099885 -0500
+@@ -352,7 +352,24 @@
+ #endif
+ 
+ #ifdef CONFIG_SFC_NOR
+-	#define CONFIG_BOOTCOMMAND "mw 0xb0011134 0x300 1;sdstart;sdupdate;sf probe;sf read 0x80600000 0x40000 0x1F0000; bootm 0x80600000"
++	#define CONFIG_BOOTCOMMAND " \
++	mw 0xb0011134 0x300 1; \
++	sdstart; \
++	sdupdate; \
++	if mmc rescan; then \
++	  echo \"MMC Found\"; \
++	  if ext4load mmc 0:1 0x80600000 /boot/uEnv.txt; then \
++	    env import -t 0x80600000 ${filesize}; boot; \
++	  fi; \
++	  if ext4load mmc 0:1 0x80600000 uEnv.txt; then \
++	    env import -t 0x80600000 ${filesize}; boot; \
++	  fi; \
++	  else \
++	    echo \"MMC not found...\"; \
++	fi; \
++	sf probe; \
++	sf read 0x80600000 0x40000 0x1F0000; \
++	bootm 0x80600000;"
+ #endif /* CONFIG_SFC_NOR */
+ 
+ #ifdef CONFIG_SFC_NAND

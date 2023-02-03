@@ -1,0 +1,105 @@
+#!/bin/sh
+#
+# Start wifibroadcast
+#
+
+. /etc/wfb.conf
+
+keydir="/etc"
+chip=$(ipcinfo -c)
+
+load_rtl() {
+  modprobe cfg80211
+  modprobe 88XXau rtw_tx_pwr_idx_override=${driver_txpower_override}
+  sleep 3
+}
+
+load_ath() {
+  modprobe cfg80211
+  modprobe mac80211
+  modprobe ath9k_htc
+  sleep 3
+}
+
+load_interface() {
+
+  if [ ${driver} = "rtl" ]; then
+	  ifconfig ${wlan} up
+	  iwconfig ${wlan} mode monitor
+  elif [ ${driver} = "ath" ]; then
+	  iwconfig ${wlan} mode monitor
+	  ifconfig ${wlan} up
+  fi
+
+  iw reg set ${region}
+  iwconfig ${wlan} channel ${channel}
+  iw dev ${wlan} set txpower fixed $((${txpower} * 100))
+}
+
+start_wfb() {
+  wfb_tx -p ${stream} -u ${udp_port} -K ${keydir}/drone.key -B ${bandwidth} -M ${mcs_index} -S ${stbc} -L ${ldpc} -G ${guard_interval} -k ${fec_k} -n ${fec_n} -T ${fec_timeout} -i ${link_id} ${wlan} &
+}
+
+case "$1" in
+  start)
+	if ! [ -f /etc/system.ok ]; then
+		killall majestic
+		/usr/bin/tweaksys ${chip}
+	fi
+
+    if [ ${daemon} -eq 1 ]; then
+
+	  echo "Loading modules for selected driver..."
+
+	  if [ ${driver} = "rtl"  ]; then
+		if ! lsmod | grep "88XXau"; then
+		  load_rtl
+		fi
+	  elif [ ${driver} = "ath" ]; then
+		if ! lsmod | grep "ath9k_htc"; then
+          load_ath
+		fi
+	  fi
+
+	  echo "Done."
+	  echo "Preparing interface wlan..."
+	  
+	  load_interface
+	  
+	  echo "Done."
+
+	  if ! cat ${keydir}/drone.key > /dev/null 2>&1; then
+		echo "Generating drone & ground station keys..."
+		cd ${keydir} ; wfb_keygen
+		echo "Done."
+	  else
+		echo "Drone key exist... Done."
+	  fi
+
+	  echo "Starting Wifibroadcast service..."
+	  
+	  start_wfb
+
+	  echo "Done."
+
+	  if [ ${telemetry} = "true" ]; then
+		if [ ${chip} = "gk7205v200" ]; then
+			# UART2_RX mux
+			devmem 0x120c0010 32 0x1e04
+		fi
+		/usr/bin/mavlink-routerd &
+		/usr/bin/telemetry start
+	  fi
+
+	else
+      echo "Wifibroadcast service disabled in wfb.conf..."
+	fi
+    ;;
+  stop)
+    echo "Stopping wifibroadcast service..."
+    kill -9 $(pidof wfb_tx)
+    ;;
+    *)
+    echo "Usage: $0 {start|stop}"
+    exit 1
+esac
