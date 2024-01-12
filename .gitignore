@@ -1,2 +1,4 @@
 buildroot-*/
 output/
+buildroot-*.tar.gz
+
