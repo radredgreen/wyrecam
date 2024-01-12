@@ -89,8 +89,11 @@ if false; then
 #  chmod 755 /pivot/etc/init.d/S50dropbear
 fi
 
+
+echo 38 > /sys/class/gpio/export
+
 # Blink the light forever (don't boot further)
-if false; then
+if true; then
   sync
   sync
   sync
