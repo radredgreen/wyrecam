@@ -2,6 +2,84 @@
 
 KMOD_PATH=/lib/modules/3.10.14__isvp_swan_1.0__/ingenic
 
+# this is the objective clock setting
+# cat /proc/jz/clock/clocks
+#ID NAME       FRE        stat       count     parent
+#--------------------------------------------------------
+# 1 ext0          0.032MHz  enable   0 root
+# 2 ext1         24.000MHz  enable   11 root
+# 3 otg_phy      48.000MHz  enable   0 root
+#--------------------------------------------------------
+# 5 apll       1392.000MHz  enable   1 ext1
+# 6 mpll       1080.000MHz  enable   7 ext1
+# 7 vpll       1200.000MHz  enable   1 ext1
+# 8 sclka      1392.000MHz  enable   9 apll
+#--------------------------------------------------------
+#10 cclk       1392.000MHz  enable   0 sclka
+#11 l2clk       696.000MHz  enable   0 sclka
+#12 h0clk       270.000MHz  enable   4 mpll
+#13 h2clk       270.000MHz  enable   6 mpll
+#14 pclk        135.000MHz  enable   6 mpll
+#15 msc          24.000MHz  enable   0 ext1
+#--------------------------------------------------------
+#17 cgu_isp     216.000MHz  enable   1 mpll
+#18 cgu_cim      24.000MHz  enable   1 vpll
+#19 cgu_ssi      49.090MHz  enable   2 mpll
+#20 cgu_msc_mux 1392.000MHz  enable   0 sclka
+#21 cgu_i2s_spk    4.096MHz  enable   2 sclka
+#22 cgu_i2s_mic    4.096MHz  enable   2 sclka
+#23 cgu_msc1     24.000MHz  enable   1 sclka
+#24 cgu_msc0     24.000MHz  enable   0 sclka
+#25 cgu_lpc       4.687MHz disable   0 vpll
+#26 cgu_macphy    4.218MHz disable   0 mpll
+#27 cgu_vpu     540.000MHz  enable   1 mpll
+#28 cgu_ddr     540.000MHz  enable   0 mpll
+#29 cgu_rsa      67.500MHz disable   0 mpll
+#--------------------------------------------------------
+#31 ddr         270.000MHz  enable   0 h0clk
+#32 tcu         135.000MHz  enable   0 pclk
+#33 rtc         135.000MHz  enable   0 pclk
+#34 des         135.000MHz  enable   0 pclk
+#35 csi         135.000MHz  enable   1 pclk
+#36 lcd         270.000MHz disable   0 h0clk
+#37 isp         270.000MHz  enable   1 h0clk
+#38 pdma        270.000MHz  enable   1 h2clk
+#39 sfc         270.000MHz  enable   1 h2clk
+#40 uart2        24.000MHz disable   0 ext1
+#41 uart1        24.000MHz  enable   1 ext1
+#42 uart0        24.000MHz disable   0 ext1
+#43 sadc        135.000MHz  enable   0 pclk
+#44 dmic        135.000MHz disable   0 pclk
+#45 aic         135.000MHz  enable   1 pclk
+#46 hash        270.000MHz disable   0 h2clk
+#47 i2c1        135.000MHz disable   0 pclk
+#48 i2c0        135.000MHz disable   0 pclk
+#49 ssi0         49.090MHz  enable   0 cgu_ssi
+#50 ssi1         49.090MHz disable   0 cgu_ssi
+#51 ssi_slv     135.000MHz disable   0 pclk
+#52 msc1        270.000MHz  enable   0 h2clk
+#53 msc0        270.000MHz  enable   0 h2clk
+#54 otg1        270.000MHz  enable   1 h2clk
+#--------------------------------------------------------
+#56 cpu          24.000MHz  enable   0 ext1
+#57 apb0         24.000MHz  enable   0 ext1
+#58 sys_ost      24.000MHz  enable   2 ext1
+#59 ahb0         24.000MHz  enable   0 ext1
+#--------------------------------------------------------
+#61 riscv       270.000MHz  enable   0 h2clk
+#62 aes         270.000MHz disable   0 h2clk
+#63 rsa         135.000MHz disable   0 pclk
+#64 ahb1         24.000MHz  enable   1 ext1
+#65 gmac        270.000MHz disable   0 h2clk
+#66 ipu         270.000MHz  enable   5090 h0clk
+#67 dtrng       135.000MHz disable   0 pclk
+#68 avpu        270.000MHz  enable   1 h0clk
+
+
+echo 216000000 > /proc/jz/clock/cgu_isp/rate
+echo 4096000 > /proc/jz/clock/cgu_i2s_mic/rate
+echo 4096000 > /proc/jz/clock/cgu_i2s_spk/rate
+
 echo 1 >/proc/sys/vm/overcommit_memory
 
 check_return() {
@@ -14,7 +92,7 @@ check_return() {
 
 lsmod | grep "avpu" >/dev/null
 if [ $? -ne 0 ]; then
-    insmod ${KMOD_PATH/%\//}/avpu.ko clk_name='vpll' avpu_clk=400000000
+    insmod ${KMOD_PATH/%\//}/avpu.ko clk_name='mpll' avpu_clk=540000000
     check_return "insmod avpu"
 fi
 
@@ -118,10 +196,8 @@ if [ $? -ne 0 ]; then
     insmod ${KMOD_PATH/%\//}/sensor_${SENSOR}_t31.ko ${SENSOR_PARAM}
     check_return "insmod sensor drv"
 fi
-#
-# Need for claim gpio 57,58 on HICHIP (CamHi/Xin) boards
+
 insmod ${KMOD_PATH/%\//}/gpio.ko
-echo $(yaml-cli -i /etc/majestic.yaml -g .nightMode.irCutPin1) >/proc/jz/claim/gpio
-echo $(yaml-cli -i /etc/majestic.yaml -g .nightMode.irCutPin2) >/proc/jz/claim/gpio
-# echo $(yaml-cli -i /etc/majestic.yaml -g .nightMode.irSensorPin) >/proc/jz/claim/gpio
-#
+
+insmod ${KMOD_PATH/%\//}/sample_pwm_core.ko
+insmod ${KMOD_PATH/%\//}/sample_pwm_hal.ko
