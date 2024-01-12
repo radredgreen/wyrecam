@@ -1,0 +1,8 @@
+config BR2_PACKAGE_POSITRON_WYRECAM
+	bool "positron"
+	depends on BR2_PACKAGE_JPEG
+	depends on BR2_PACKAGE_JPEG_TURBO
+	depends on BR2_PACKAGE_MBEDTLS_OPENIPC
+	depends on BR2_PACKAGE_AVAHI
+	help
+	  positron

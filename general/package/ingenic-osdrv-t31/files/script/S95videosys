@@ -1,6 +1,6 @@
 #!/bin/sh
 
-DAEMON="t31-rtspd"
+DAEMON="positron"
 PIDFILE="/var/run/$DAEMON.pid"
 
 DAEMON_ARGS="-s"
@@ -10,6 +10,18 @@ DAEMON_ARGS="-s"
 
 load_videosys() {
 	printf 'Starting %s: ' "$DAEMON"
+	# allow the clock to settle
+	sleep 1
+	# try to help the overlayfs wake up and not throw an EINVAL in directory fsync on store initialization
+	[ -f /PositronStore/.HomeKitStore/90.00 ] || touch /PositronStore/.HomeKitStore/.touched
+	sync
+	sync
+	sync
+	[ ! -f /PositronStore/.HomeKitStore/.touched ] || rm /PositronStore/.HomeKitStore/.touched
+	sync
+	sync
+	sync
+
 	[ -f /usr/bin/$DAEMON ] || echo -en "DISABLED, "
 	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/bin/$DAEMON" \
 		-- $DAEMON_ARGS
@@ -37,6 +49,7 @@ start() {
 	else
 		export SENSOR=$SENSOR
 	fi
+	sleep 1
 	load_videosys
 }
 

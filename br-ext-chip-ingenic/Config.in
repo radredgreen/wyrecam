@@ -44,4 +44,5 @@ source "$BR2_EXTERNAL_INGENIC_PATH/package/v4l2rtspserver/Config.in"
 source "$BR2_EXTERNAL_INGENIC_PATH/package/v4l2cpp/Config.in"
 source "$BR2_EXTERNAL_INGENIC_PATH/package/live555-wyrecam/Config.in"
 source "$BR2_EXTERNAL_INGENIC_PATH/package/t31_rtspd_wyrecam/Config.in"
+source "$BR2_EXTERNAL_INGENIC_PATH/package/positron_wyrecam/Config.in"
 
