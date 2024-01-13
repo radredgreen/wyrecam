@@ -2,7 +2,16 @@
 HomeKit camera firmware for ingenic T31X based wyze cameras
 
 ### Status
-This project is a work in progress.  Currently it supports a limited ability to stream RTSP from the camera.
+This project is a work in progress.
+
+Progress 
+* Homekit pairing (fixed pairing code 010-72-024)
+* Jpeg snapshots 
+* Ingenic video pipeline with preparations for srtp, hksv, motion and jpeg
+
+No video yet.
+
+The ability to stream RTSP using t31_rtspd(live555) was removed from the camera to make room for positron development.
 
 ### This project aims for the following:
 * 100% open source (readable and inspectable) software 
@@ -10,10 +19,11 @@ This project is a work in progress.  Currently it supports a limited ability to 
 	* Kernel: Fully open source kernel software
 	* Drivers and SOC libraries are a work in progress (see TODO.md for remaining BLOBs)
 	* Video and audio streaming software
+	* No closed source or precompiled toolchains
 * First class support for HomeKit (work in progress)
 	* Goal to support HKSV natively from the camera with high performance
 	* Can be disabled through configuration
-* First class support RTSP
+* First class support for RTSP
 	* Many custom camera configurations use RTSP to self host video backend processing and vendors are removing this functionality to drive people to their cloud services
 	* Can be disabled through configuration
 * As secure as possible
@@ -98,6 +108,7 @@ https://github.com/Dafang-Hacks
 
 ### Apple HAP ADK
 https://github.com/apple/HomeKitADK, likely the basis of homekit functionality in future releases
+see joebelford's useful fork: https://github.com/joebelford/HomeKitADK and https://github.com/joebelford/homekit_camera
 
 ### hkcam
 https://github.com/brutella/hkcam, a camera project that I used previously

@@ -24,8 +24,8 @@ DONE: Figure out how we want to configure an unconfigured (freshly written) flas
 DONE: Then remove credentials from update.sh
 
 ## TODO for release 2.0 
-### Determine a video pipeline
-* Build monolithic application in user domain (least modular)
+### DONE: Determine a video pipeline
+* DONE-THIS: Build monolithic application in user domain (least modular)
 	* (+) Raw h264/5 nalu to network sockets
 	* (+) Highest performance 
 	* (+) Perhaps use something like smolrtspd
@@ -55,7 +55,7 @@ DONE: Then remove credentials from update.sh
 	* (-) most work
 	* (-) libimp.so can't be linked in kernel module - something-something libimp.a?
 
-## Future: Build compiled blobs from scratch
+## Future: Build compiled blobs from scratch - help wanted!
 ```audio.ko 
 gpio.ko
 atbm603x_wifi_sdio.ko
@@ -71,6 +71,8 @@ libimp.so
 libsysutils.so
 gc2053-t31.bin
 speaker_ctl.ko
+sample_pwm_core.ko
+sample_pwm_hal.ko
 ```
 
 ## Future: Determine how to configure the camera
@@ -82,13 +84,14 @@ speaker_ctl.ko
 * anything on the OSD?
 * reset hk pairing
 
-## Future: Determine how to handle GPIO
-* how is night vision going to be controlled
-* Status LED x2, IRLED, IRCUT filter, doorbell
+## Determine how to handle GPIO
+* DONE (thanks geekman!): how is night vision going to be controlled, IRLED, IRCUT filter
+* Status LED x2, doorbell button
 
 ## Future: Audio (mic -> videofeed)
 * Get alsa microphone working
 * Mux data into rtsp feed
+* flaac
 
 ## Future: Audio return (return audio -> speaker)
 * Get speaker working
@@ -96,9 +99,9 @@ speaker_ctl.ko
 
 ## Future: Lower priority
 * Shorten openipc's sensor probing process by cutting out unused sensors
-* Adopt Wyze's method and script for probing wifi cards and installing the correct driver, then remove the hardcoded drivers from /etc/modules
-* Auto update mechanism
-* Hostname, login banner, cmd prompt in uboot branding from openipc to wyrecam
+* DONE: Adopt Wyze's method and script for probing wifi cards and installing the correct driver, then remove the hardcoded drivers from /etc/modules
+* Auto update mechanism?
+* DONE: Hostname, login banner, cmd prompt in uboot branding from openipc to wyrecam
 
 ## Low priority
 * Anything to do with docker
