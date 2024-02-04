@@ -214,15 +214,20 @@ build_mmc_img() {
 
   echo_c 34 "\nMaking mmc card image"
     rm -f output/images/wyrecam_install.img
-    fallocate -l 50M output/images/wyrecam_install.img
+#    fallocate -l 50M output/images/wyrecam_install.img
+    gunzip -c blank.img.gz > output/images/wyrecam_install.img
 guestfish -a output/images/wyrecam_install.img <<_EOF_
     run
+    #part-disk /dev/sda msdos
     part-init /dev/sda msdos
-    part-add /dev/sda p 1 -1
+    part-add /dev/sda p 1 102399
+    part-set-mbr-id /dev/sda 1 0x0b
+    #part-set-name /dev/sda 1 WYRECAM
     #part-add /dev/sda p 51201 -1
-    mkfs vfat /dev/sda1
+    mkfs exfat /dev/sda1
     #mkfs ext2 /dev/sda2
     mount /dev/sda1 /
+    mkdir /spi_backups
     copy-in factory_t31_ZMC6tiIDQN /
     copy-in output/images/nor_full.bin /
     copy-in output/images/upgrade.sh /

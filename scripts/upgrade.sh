@@ -1,8 +1,13 @@
 echo "UPGRADE SCRIPT START"
-# Turn on the red led to show that we're working
+# Turn off the red led to show that we're working
 echo 38 > /sys/class/gpio/export
 echo out > /sys/class/gpio/gpio38/direction
-echo 0 > /sys/class/gpio/gpio38/value
+echo 1 > /sys/class/gpio/gpio38/value
+
+# Turn on the blue led to show that we're working
+echo 39 > /sys/class/gpio/export
+echo out > /sys/class/gpio/gpio39/direction
+echo 0 > /sys/class/gpio/gpio39/value
 
 # Backup the existing nor flash to the SD Card
 if true; then
@@ -83,19 +88,22 @@ EOF
 fi
 
 # Set the hostname 
-if true; then
-  MAC=`cat /sys/class/net/wlan0/address`
-  MAC="${MAC//:}"
-  if [ "`cat /etc/hostname`" != "wyrecam-$MAC" ] ; then
-    echo "wyrecam-$MAC" > /etc/hostname
-  fi
-fi
+# wifi driver isn't loaded yet for this to work
+# if true; then
+#  MAC=`cat /sys/class/net/wlan0/address`
+#  MAC="${MAC//:}"
+#  if [ "`cat /etc/hostname`" != "wyrecam-$MAC" ] ; then
+#    echo "wyrecam-$MAC" > /etc/hostname
+#  fi
+#fi
 
-# Enable dropbear (ssh)
-if false; then
+
+# Disable dropbear (ssh)
+# Set to false to enable
+if true; then
   chmod 644 /pivot/etc/init.d/S50dropbear
-#else
-#  chmod 755 /pivot/etc/init.d/S50dropbear
+else
+  chmod 755 /pivot/etc/init.d/S50dropbear
 fi
 
 
