@@ -82,6 +82,15 @@ network={
 EOF
 fi
 
+# Set the hostname 
+if true; then
+  MAC=`cat /sys/class/net/wlan0/address`
+  MAC="${MAC//:}"
+  if [ "`cat /etc/hostname`" != "wyrecam-$MAC" ] ; then
+    echo "wyrecam-$MAC" > /etc/hostname
+  fi
+fi
+
 # Enable dropbear (ssh)
 if false; then
   chmod 644 /pivot/etc/init.d/S50dropbear
