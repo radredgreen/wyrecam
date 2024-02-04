@@ -7,9 +7,15 @@ This project is a work in progress.
 Progress 
 * Homekit pairing (fixed pairing code 010-72-024)
 * Jpeg snapshots 
-* Ingenic video pipeline with preparations for srtp, hksv, motion and jpeg
+* Video streaming (SRTP, not HKSV yet) 
+* Secure end-to-end (camera to iOS device or home hub) AES256 (AES_256_CM_HMAC_SHA1_80) encryption provided by MBEDTLS
+* Hardware accelerated video pipeline with setup for srtp (H264), hksv (H264), motion and jpeg snapshots 
+* Audio microphone and speaker pipeline
+* fdk-aac AAC-ELD soft codec for camera microphone data streaming to controller
+* Hardware accelerated motion detection and with homekit motion notifications
+* Day/Night IR filter automatically enabled based on the brightness of the scene
+* IR LED Floodlights have been tested (but disabled for now)
 
-No video yet.
 
 The ability to stream RTSP using t31_rtspd(live555) was removed from the camera to make room for positron development.
 
@@ -20,7 +26,7 @@ The ability to stream RTSP using t31_rtspd(live555) was removed from the camera 
 	* Drivers and SOC libraries are a work in progress (see TODO.md for remaining BLOBs)
 	* Video and audio streaming software
 	* No closed source or precompiled toolchains
-* First class support for HomeKit (work in progress)
+* First class support for HomeKit
 	* Goal to support HKSV natively from the camera with high performance
 	* Can be disabled through configuration
 * First class support for RTSP
@@ -72,7 +78,7 @@ Flash Finish configure: 3:21 m
 Boot Compete: 4:00 m
 ```
 
-Red LED light turns off.  Unplug power.
+Red LED light blinks.  Unplug power.
 
 Remove sd card from the camera and backup spi_backup/backup.bin  I recommend saving this with the filename of the MAC of the camera.  This file can be used to recover the the camera to the original firmware - just rename the file to nor_full.bin, load it to the sd card and reflash.
 
