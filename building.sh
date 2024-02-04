@@ -214,8 +214,7 @@ build_mmc_img() {
 
   echo_c 34 "\nMaking mmc card image"
     rm -f output/images/wyrecam_install.img
-#    fallocate -l 50M output/images/wyrecam_install.img
-    gunzip -c blank.img.gz > output/images/wyrecam_install.img
+    fallocate -l 50M output/images/wyrecam_install.img
 guestfish -a output/images/wyrecam_install.img <<_EOF_
     run
     #part-disk /dev/sda msdos
@@ -224,7 +223,7 @@ guestfish -a output/images/wyrecam_install.img <<_EOF_
     part-set-mbr-id /dev/sda 1 0x0b
     #part-set-name /dev/sda 1 WYRECAM
     #part-add /dev/sda p 51201 -1
-    mkfs exfat /dev/sda1
+    mkfs fat /dev/sda1
     #mkfs ext2 /dev/sda2
     mount /dev/sda1 /
     mkdir /spi_backups
