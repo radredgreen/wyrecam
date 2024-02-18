@@ -9,5 +9,6 @@
 # *    *      *     *     *     command to be executed
 
 *      *      *     *     *     /root/checkpos.sh
+0      0      *     *     *     /root/clearlog.sh
 
 
