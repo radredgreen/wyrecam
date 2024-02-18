@@ -1,20 +1,8 @@
-################################################################################
-#
-# mavlink-router
-#
-################################################################################
 
-MAVLINK_ROUTER_LICENSE = ASF-2.0
+#POSITRON_WYRECAM_LICENSE = GPL v3
 
-define MAVLINK_ROUTER_INSTALL_TARGET_CMDS
-	$(INSTALL) -m 0755 -d $(TARGET_DIR)/usr/bin
-	cp ../general/package/mavlink-router/files/mavlink-routerd $(TARGET_DIR)/usr/bin/mavlink-routerd
+MAVLINK_ROUTER_SITE_METHOD = local
+MAVLINK_ROUTER_SITE = ../../mavlink-router-cmake
 
-	$(INSTALL) -m 755 -d $(TARGET_DIR)/etc
-	cp ../general/package/mavlink-router/files/mavlink.conf $(TARGET_DIR)/etc/mavlink.conf
+$(eval $(cmake-package))
 
-	$(INSTALL) -m 755 -d $(TARGET_DIR)/etc/init.d
-	cp ../general/package/mavlink-router/files/S97mavlink $(TARGET_DIR)/etc/init.d
-endef
-
-$(eval $(generic-package))
