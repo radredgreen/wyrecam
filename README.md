@@ -1,23 +1,17 @@
 # wyrecam
-HomeKit camera firmware for ingenic T31X based wyze cameras
+Wyrecam is an open source, vanilla HomeKit Secure Video (HKSV) firmware for the wyze v3 camera
 
-### Status
-This project is a work in progress.
+Demonstration:
 
-Progress 
-* Homekit pairing (fixed pairing code 010-72-024)
+### Features
+* Video streaming (streaming and recording) 
+* Secure end-to-end (camera to iOS device or home hub) (Streaming: AES_256_CM_HMAC_SHA1_80, Recording: CHACHA20_POLY1305) encryption provided by MBEDTLS
+* Homekit pairing (fixed pairing code 0107-2024)
 * Jpeg snapshots 
-* Video streaming (SRTP, not HKSV yet) 
-* Secure end-to-end (camera to iOS device or home hub) AES256 (AES_256_CM_HMAC_SHA1_80) encryption provided by MBEDTLS
-* Hardware accelerated video pipeline with setup for srtp (H264), hksv (H264), motion and jpeg snapshots 
-* Audio microphone and speaker pipeline
-* fdk-aac AAC-ELD soft codec for camera microphone data streaming to controller
-* Hardware accelerated motion detection and with homekit motion notifications
+* Audio (streaming, not recording or talkback, yet)
+* Motion detection and with homekit motion notifications
 * Day/Night IR filter automatically enabled based on the brightness of the scene
-* IR LED Floodlights have been tested (but disabled for now)
-
-
-The ability to stream RTSP using t31_rtspd(live555) was removed from the camera to make room for positron development.
+* IR LED Night vision lights
 
 ### This project aims for the following:
 * 100% open source (readable and inspectable) software 
@@ -29,11 +23,8 @@ The ability to stream RTSP using t31_rtspd(live555) was removed from the camera 
 * First class support for HomeKit
 	* Goal to support HKSV natively from the camera with high performance
 	* Can be disabled through configuration
-* First class support for RTSP
-	* Many custom camera configurations use RTSP to self host video backend processing and vendors are removing this functionality to drive people to their cloud services
-	* Can be disabled through configuration
 * As secure as possible
-	* Only SSHD (dropbear) and HomeKit (Apple APK) / RTSPD (live555) listening ports running.  SSHD can be disabled.
+	* Only SSHD (dropbear) and HomeKit (Apple APK) listening ports running.  SSHD is disabled by default.
 	* Secure root password setup at install
 * No anti-features
 	* No web configuration - you'll have to ssh into the camera or use and SD card to configure it
@@ -53,23 +44,27 @@ TODO This first step will probably error out trying to build an sd card image - 
 ```
 Copy the image to an SD card (know what you're doing)
 ```
-dd if=/output/image/wyrecam_install.img of=/dev/<sdb> bs=512
+dd if=output/image/wyrecam_install.img of=/dev/<sdb> bs=512
 ```
 
-### Configure and install
+### Configure and Install
+
+## Edit update.sh
 Insert the new sd card into a computer and edit update.sh to add the wifi credentials and a root passwd (search for passwd and replace with your new passed)
 
 Optionally disable ssh and enable blinking lights to see when the flash process is done
 
 Unmount the sd card and eject from the computer
 
+## Install the image
+
 Insert the sd card into the camera and power on.  Red LED light will turn on
 
 DO NOT REMOVE POWER for 10 minutes - this build has no recovery mechanisms from interupted upgrades.
 
-
 Upgrade finish times
-```Boot: 0:09 m
+```
+Boot: 0:09 m
 Flash Backup: 2:03 m
 Flash Erase: 2:49 m
 Flash Write: 3:09 m
@@ -82,6 +77,18 @@ Red LED light blinks.  Unplug power.
 
 Remove sd card from the camera and backup spi_backup/backup.bin  I recommend saving this with the filename of the MAC of the camera.  This file can be used to recover the the camera to the original firmware - just rename the file to nor_full.bin, load it to the sd card and reflash.
 
+## Add to HomeKit
+See the video above
+
+## Configuration in Home.app
+# Night Vision
+Night mode is controlled automatically based on the brightness of the scene.  Additionally, the home app has a switch for "Night Vision Light" which will turn on the infrared LED when the scene is dark.
+
+# Camera Status Light
+The Camera Status Ligth swich is used to turn on and off the red LED on the front of the camera.  This can be helpful if the camera is next to a window and sees the reflection of the LED. Toggling this twice flips the image. Which brings us to...
+
+# Invert the image
+If the camera is mounted from the ceiling, it can be useful to flip the image.  Toggling the Camera Status Light twice will flip the image.
 
 
 ### Documentation
@@ -97,7 +104,7 @@ U-boot used and the method of creating an SD card were borrowed from wyrecam
 The point-of-departure for wyrecam.  This project aims to be mergable with OpenIPC down the road but will remain separate until all components of OpenIPC (especially Majestic) are fully open source.
 
 ### t20_rtspd
-https://github.com/geekman/t20-rtspd, basis of the basic rtsp streamer used in rel 1.
+https://github.com/geekman/t20-rtspd, basis of the basic rtsp streamer used in rel 1.  It looks like this supports T31 now as well.  Go here for an RTSP streamer
 
 ### ingenic_videocap and openmiko
 https://github.com/openmiko/ingenic_videocap, an alternative v4l2 video pipeline 
