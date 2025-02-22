@@ -2,6 +2,7 @@
 Wyrecam is an open source, vanilla HomeKit Secure Video (HKSV) firmware for the wyze v3 camera
 
 Demonstration:
+https://github.com/user-attachments/assets/de1e8832-b0f6-4e12-b284-b7f8cb89f500
 
 ### Features
 * Video streaming (streaming and recording) 
