@@ -3,7 +3,10 @@ Wyrecam is an open source, vanilla HomeKit Secure Video (HKSV) firmware for the 
 
 Demonstration:
 
-### Features
+[![Watch the video]](https://github.com/user-attachments/assets/de1e8832-b0f6-4e12-b284-b7f8cb89f500)
+
+
+## Features
 * Video streaming (streaming and recording) 
 * Secure end-to-end (camera to iOS device or home hub) (Streaming: AES_256_CM_HMAC_SHA1_80, Recording: CHACHA20_POLY1305) encryption provided by MBEDTLS
 * Homekit pairing (fixed pairing code 0107-2024)
@@ -13,7 +16,7 @@ Demonstration:
 * Day/Night IR filter automatically enabled based on the brightness of the scene
 * IR LED Night vision lights
 
-### This project aims for the following:
+## This project aims for the following:
 * 100% open source (readable and inspectable) software 
 	* U-Boot: Control from the very first command executed
 	* Kernel: Fully open source kernel software
@@ -33,7 +36,7 @@ Demonstration:
 	* Designed to work without an internet connection (on a dedicated VLAN for example)
 * Built on cheap (WYZEC3, etc) cameras for low cost
 
-### Building
+## Building
 The first two optional steps build the factory boot kernel for initial boot from the sd card
 
 TODO This first step will probably error out trying to build an sd card image - that's ok for now
@@ -47,16 +50,16 @@ Copy the image to an SD card (know what you're doing)
 dd if=output/image/wyrecam_install.img of=/dev/<sdb> bs=512
 ```
 
-### Configure and Install
+## Configure and Install
 
-## Edit update.sh
+### Edit update.sh
 Insert the new sd card into a computer and edit update.sh to add the wifi credentials and a root passwd (search for passwd and replace with your new passed)
 
 Optionally disable ssh and enable blinking lights to see when the flash process is done
 
 Unmount the sd card and eject from the computer
 
-## Install the image
+### Install the image
 
 Insert the sd card into the camera and power on.  Red LED light will turn on
 
@@ -77,21 +80,21 @@ Red LED light blinks.  Unplug power.
 
 Remove sd card from the camera and backup spi_backup/backup.bin  I recommend saving this with the filename of the MAC of the camera.  This file can be used to recover the the camera to the original firmware - just rename the file to nor_full.bin, load it to the sd card and reflash.
 
-## Add to HomeKit
-See the video above
+### Add to HomeKit
+See the video above.  The pairing code is 0107-2024
 
 ## Configuration in Home.app
-# Night Vision
+### Night Vision
 Night mode is controlled automatically based on the brightness of the scene.  Additionally, the home app has a switch for "Night Vision Light" which will turn on the infrared LED when the scene is dark.
 
-# Camera Status Light
+### Camera Status Light
 The Camera Status Ligth swich is used to turn on and off the red LED on the front of the camera.  This can be helpful if the camera is next to a window and sees the reflection of the LED. Toggling this twice flips the image. Which brings us to...
 
-# Invert the image
+### Invert the image
 If the camera is mounted from the ceiling, it can be useful to flip the image.  Toggling the Camera Status Light twice will flip the image.
 
 
-### Documentation
+## Documentation
 See the docs directory for more documentation
 
 ## Similar projects, references and credits
