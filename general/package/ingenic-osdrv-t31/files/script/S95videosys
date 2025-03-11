@@ -3,7 +3,10 @@
 DAEMON="positron"
 PIDFILE="/var/run/$DAEMON.pid"
 
-DAEMON_ARGS="-s"
+# To turn on positron logging
+#DAEMON_ARGS="-s"
+
+DAEMON_ARGS=""
 
 # shellcheck source=/dev/null
 [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
