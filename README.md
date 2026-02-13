@@ -78,14 +78,14 @@ WyreCam is an open-source firmware for the Wyze v3 camera that integrates seamle
     EOF
     fi
     ```
-5. Save the file and eject the SD card from your computer.  This file can be used to recover the the camera to the original firmware - just rename the file to nor_full.bin, load it to the sd card and reflash.
+5. Save the file and eject the SD card from your computer.  
  
 ### Install the Image
  
 1. Insert the SD card into the camera and power it on. The red LED light will turn on.
 2. Wait 10 minutes for the upgrade process to complete. Do not remove power during this time.
 3. When the red LED light blinks, unplug the power and remove the SD card.
-4. Backup the `spi_backup/backup.bin` file from the SD card for recovery purposes.
+4. Backup the `spi_backup/backup.bin` file from the SD card for recovery purposes. This file can be used to recover the the camera to the original firmware - just rename the file to nor_full.bin, load it to the sd card top directory and reflash.
  
 ### Add WyreCam to HomeKit
  
