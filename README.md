@@ -78,7 +78,7 @@ WyreCam is an open-source firmware for the Wyze v3 camera that integrates seamle
     EOF
     fi
     ```
-5. Save the file and eject the SD card from your computer.
+5. Save the file and eject the SD card from your computer.  This file can be used to recover the the camera to the original firmware - just rename the file to nor_full.bin, load it to the sd card and reflash.
  
 ### Install the Image
  
