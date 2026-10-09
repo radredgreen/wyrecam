@@ -126,4 +126,4 @@ Refer to the [docs directory](docs/) for more information.
  
 ## Build Instructions
  
-Detailed build instructions have been moved to a dedicated file. Please refer to [BUILD_INSTRUCTIONS.md](build_instructions.md) for step-by-step guidance on building WyreCam from source.
+Detailed build instructions have been moved to a dedicated file. Please refer to [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) for step-by-step guidance on building WyreCam from source.
